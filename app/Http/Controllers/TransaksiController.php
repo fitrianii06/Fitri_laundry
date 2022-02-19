@@ -1,9 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoretransaksiRequest;
+use App\Http\Requests\UpdatetransaksiRequest;
+use App\Models\Member;
+use App\Models\Paket;
+use App\Models\Transaksi;
+use App\Models\DetailTransaksi;
+use Illuminate\Support\Facades\Auth;
+
 
 class TransaksiController extends Controller
 {
@@ -14,7 +20,11 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        //
+        $data['member'] = Member::get();
+        $data['paket'] = paket::where('id_outlet', auth::user()->id_outlet)->get();
+
+        return view('transaksi.index')->with($data);
+       
     }
 
     /**
@@ -30,21 +40,54 @@ class TransaksiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoretransaksiRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        
+        $request['id_outlet'] = auth()->user()->id_outlet;
+        $request['kode_invoice'] = $this->generateKodeInvoice();
+        $request['tgl_bayar'] = ($request->bayar == 0?NULL:date('Y-m-d H:i:s'));
+        $request['status'] = 'baru';
+        $request['dibayar'] = ($request->bayar == 0?'belum_dibayar':'dibayar');
+        $request['id_user'] = auth()->user()->id;
+
+        //input transaksi
+        $input_transaksi = Transaksi::create($request->all());
+        if($input_transaksi == null){
+            return back()->withErrors([
+                 'transaksi' => 'input transaksi gagal!',
+            ]);
+        }
+        //input detail pembelian
+        foreach ($request->id_paket as $i => $v) {
+            $input_detail = DetailTransaksi::create([
+                 'id_transaksi' => $input_transaksi->id,
+                'id_paket' => $request->id_paket[$i],
+                'qty' => $request->qty[$i],
+                'keterangan' =>''
+            ]);
+        }
+        return redirect('/transaksi')->with('success','input berhasil');
+    }
+
+    //
+    private function generateKodeInvoice(){
+        $last = Transaksi::orderBy('id','desc')->first();
+        $last = ($last == null?1:$last->id + 1);
+        $kode = sprintf('TKI'.date('Ymd').'%06d', $last);
+
+        return $kode;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Transaksi  $transaksi
+     * @param  \App\Models\transaksi  $transaksi
      * @return \Illuminate\Http\Response
      */
-    public function show(Transaksi $transaksi)
+    public function show(transaksi $transaksi)
     {
         //
     }
@@ -52,10 +95,10 @@ class TransaksiController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Transaksi  $transaksi
+     * @param  \App\Models\transaksi  $transaksi
      * @return \Illuminate\Http\Response
      */
-    public function edit(Transaksi $transaksi)
+    public function edit(transaksi $transaksi)
     {
         //
     }
@@ -63,11 +106,11 @@ class TransaksiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Transaksi  $transaksi
+     * @param  \App\Http\Requests\UpdatetransaksiRequest  $request
+     * @param  \App\Models\transaksi  $transaksi
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transaksi $transaksi)
+    public function update(Request $request, transaksi $transaksi)
     {
         //
     }
@@ -75,10 +118,10 @@ class TransaksiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Transaksi  $transaksi
+     * @param  \App\Models\transaksi  $transaksi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaksi $transaksi)
+    public function destroy(transaksi $transaksi)
     {
         //
     }

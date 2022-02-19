@@ -20,7 +20,7 @@ class CreateTransaksiTable extends Migration
             $table->foreignId('id_user')->constrained('users');
             $table->char('kode_invoice', 100);
             $table->dateTime('tgl');
-            $table->dateTime('deadline');
+            $table->dateTime('batas_waktu');
             $table->dateTime('tgl_bayar')->nullable();
             $table->double('biaya_tambahan')->default(0);
             $table->double('diskon')->default(0);

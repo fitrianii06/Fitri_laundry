@@ -50,7 +50,7 @@
   <script src="{{ asset('assets') }}/bootsrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Jquery -->
-  {{-- <script src="{{  asset('assets')  }}/js/plugins/jquery/dist/jquery.min.js"></script> --}}
+  <script src="{{  asset('assets')  }}/js/plugins/jquery/dist/jquery.min.js"></script> 
   <!--end Jquery -->
 
   <!--   Core   -->
@@ -72,7 +72,7 @@
       });
 
   </script>
-
+@stack('scripts')
  @stack('script')
 </body>
 

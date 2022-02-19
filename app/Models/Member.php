@@ -13,4 +13,8 @@ class Member extends Model
     public $incrementing = false;
     protected $table = 'member';
     protected $guarded = ['id'];
+    public function transaksi()
+    {
+        return $this->belongsTo(Transaksi::class);
+    }
 }

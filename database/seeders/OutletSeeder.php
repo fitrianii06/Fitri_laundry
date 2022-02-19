@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class OutletSeeder extends Seeder
 {
@@ -13,6 +14,14 @@ class OutletSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $outlet = [
+            [
+               'nama_outlet' => 'fitriani',
+               'alamat' => 'cianjur',
+               'telepon' => '0877811277'
+            ]
+           
+        ];
+        DB::table('outlet')->insert($outlet);
     }
 }

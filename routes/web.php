@@ -6,6 +6,9 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+
+use App\Http\Controllers\TransaksiController;
 
 
 Route::get('/', [LoginController::class, 'index']);
@@ -21,6 +24,9 @@ Route::get('/home', function () {
 Route::resource('/outlet', OutletController::class);
 Route::resource('/paket', PaketController::class);
 Route::resource('/member', MemberController::class);
+Route::resource('/transaksi', TransaksiController::class);
+Route::resource('/user', UserController::class);
+
 
     Route::group(['prefix' =>'a','middleware' =>['isAdmin','auth']],function(){  
     Route::get('home',[Homecontroller::class, 'index'])->name('a.home');
@@ -37,7 +43,7 @@ Route::resource('/member', MemberController::class);
      Route::resource('member', MemberController::class);
      Route::resource('paket', PaketController::class);
      Route::resource('outlet', OutletController::class);
-     Route::get('transaksi',[TransaksiController::class, 'index']);
+     Route::resource('transaksi',TransaksiController::class);
      Route::get('laporan',[LaporanController::class, 'index']);
  });
  

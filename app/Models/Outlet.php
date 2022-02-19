@@ -18,5 +18,9 @@ class Outlet extends Model
     {
         return $this->hasMany(Paket::class);
     }
+    public function transaksi()
+    {
+        return $this->belongsTo(Transaksi::class);
+    }
 
 }

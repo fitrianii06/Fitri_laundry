@@ -1,7 +1,11 @@
 <ul class="navbar-nav">
-    
     <li class="nav-item ">
       <a class="nav-link {{ Request::is('/') ? 'active' : '' }} " href="/home">
+        <i class="ni ni-archive-2"></i> Home Kasir
+      </a>
+    </li>
+    <li class="nav-item ">
+      <a class="nav-link {{ Request::is('transaksi') ? 'active' : '' }} " href="/transaksi">
         <i class="ni ni-cart"></i> Transaksi
       </a>
     </li>
